@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import logo from "../assets/logo.png"; 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-gray-900 text-white shadow-sm">
       <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
         {/* Logo */}
         <Link to="/dashboard" className="text-xl font-bold">
-          AJH Sports
+           <img src={logo} alt="AJH Sports Logo" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop Menu */}
@@ -26,18 +26,25 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             to="/signup"
-            className="px-4 py-2 border border-black rounded-lg hover:bg-gray-100 transition"
+            className="px-4 py-2 bg-[#FFD23F] text-black rounded-lg hover:bg-[#ffbd3f] transition"
           >
             Sign Up
           </Link>
           <Link
             to="/"
-            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition"
+            className="px-4 py-2 border bg-black text-white rounded-lg hover:bg-gray-900 transition"
           >
             Log In
           </Link>
+          <Link
+            to="/profilepage"
+            className="px-4 py-2 border bg-black text-white rounded-lg hover:bg-gray-900 transition"
+          >
+            Profile
+          </Link>
         </div>
 
+        
         {/* Mobile Menu Button */}
         <button
           className="md:hidden text-2xl"

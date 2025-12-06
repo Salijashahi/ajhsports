@@ -1,107 +1,177 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
-// signup system
-const handleSignup = async () => {
-  setError("");
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.message || "Signup failed");
-      return;
-    }
-
-    // After successful signup → go to login
-    navigate("/login");
-
-  } catch (err) {
-    setError("Server not responding");
-  }
-};
+// Signup image
+import signupImg from "../assets/signup_img.png";
 
 export default function Signup() {
+  const navigate = useNavigate();
+
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+    location: "",
+    password: ""
+  });
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message);
+        return;
+      }
+
+      navigate("/login");
+
+    } catch (error) {
+      setError("Cannot reach server");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+    <div className="w-full min-h-screen flex flex-col bg-gray-50">
 
-        {/* Title */}
-        <h1 className="text-2xl font-bold text-center mb-6">
-          Let’s get you started
-        </h1>
+      {/* NAVBAR */}
+      <Navbar />
 
-        {/* Full Name */}
-        <label className="text-sm font-medium">Full name</label>
-        <input
-          type="text"
-          placeholder="Enter your full name"
-          className="w-full p-3 mt-1 mb-4 border rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-black"
-        />
+      {/* MAIN CONTENT */}
+      <div className="flex-1 w-full flex justify-center">
+        <div className="max-w-[1300px] w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 py-16">
 
-        {/* Email */}
-        <label className="text-sm font-medium">Email address</label>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          className="w-full p-3 mt-1 mb-4 border rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-black"
-        />
+          {/* FORM SECTION */}
+          <div className="max-w-[450px]">
 
-        {/* Phone */}
-        <label className="text-sm font-medium">Phone number</label>
-        <input
-          type="text"
-          placeholder="Enter your phone number"
-          className="w-full p-3 mt-1 mb-4 border rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-black"
-        />
+            <h2 className="text-[32px] font-bold mb-8">Let’s get you started</h2>
 
-        {/* Location */}
-        <label className="text-sm font-medium">Location (Optional)</label>
-        <input
-          type="text"
-          placeholder="Enter your location"
-          className="w-full p-3 mt-1 mb-4 border rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-black"
-        />
+            {error && (
+              <p className="text-red-600 text-sm mb-3">{error}</p>
+            )}
 
-        {/* Password */}
-        <label className="text-sm font-medium">Create password</label>
-        <input
-          type="password"
-          placeholder="Enter a password"
-          className="w-full p-3 mt-1 mb-2 border rounded-lg 
-                     focus:outline-none focus:ring-2 focus:ring-black"
-        />
+            <form onSubmit={handleSignup}>
 
-        {/* Password Rules */}
-        <p className="text-xs text-gray-600 mb-4">
-          Password must contain a minimum of 8 characters and at least one symbol (e.g., @, !)
-        </p>
+              {/* Full Name */}
+              <label className="text-sm font-medium">Full name</label>
+              <input
+                type="text"
+                placeholder="Enter your fullname"
+                className="w-full p-3 border rounded mb-5 mt-1"
+                required
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
 
-        {/* Button */}
-        <button
-          className="w-full bg-black text-white py-3 rounded-lg 
-                     text-lg font-semibold hover:bg-gray-900 transition">
-          Sign Up
-        </button>
+              {/* Email */}
+              <label className="text-sm font-medium">Email address</label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full p-3 border rounded mb-5 mt-1"
+                required
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
 
-        {/* Link to login */}
-        <p className="text-center mt-6 text-sm">
-          Already a user?{" "}
-          <Link to="/" className="text-blue-600 font-semibold">
-            Login
-          </Link>
-        </p>
+              {/* Role */}
+              <label className="text-sm font-medium">Role</label>
+                <select
+                  className="w-full p-3 border rounded mb-6 mt-1 bg-white"
+                  required
+                  value={form.role}   // <-- YOU WERE MISSING THIS
+                  onChange={(e) => setForm({ ...form, role: e.target.value })}
+                >
+                  <option value="">Select your role</option>
+                  <option value="player">Player</option>
+                  <option value="coach">Coach</option>
+                  <option value="parent">Parent</option>
+                </select>
 
+              {/* Phone */}
+              <label className="text-sm font-medium">Phone number</label>
+              <input
+                type="text"
+                placeholder="Enter your phone number"
+                className="w-full p-3 border rounded mb-5 mt-1"
+                required
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+
+              {/* Password */}
+              <label className="text-sm font-medium">Create password</label>
+              <input
+                type="password"
+                placeholder="••••••••••••"
+                className="w-full p-3 border rounded mb-2 mt-1"
+                required
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+              />
+
+              <p className="text-xs text-gray-500 mb-5">
+                Password must contain at least 8 characters, including 1 number and 1 special character.
+              </p>
+
+              {/* Location */}
+              <label className="text-sm font-medium">Location</label>
+              <select
+                className="w-full p-3 border rounded mb-6 mt-1 bg-white"
+                required
+                onChange={(e) => setForm({ ...form, location: e.target.value })}
+              >
+                <option value="">Select location</option>
+                <option value="denistone">Denistone</option>
+                <option value="north-sydney">North Sydney</option>
+                <option value="hills">The Hills</option>
+              </select>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                className="w-full py-3 bg-[#FFD23F] text-black font-semibold rounded-lg"
+              >
+                Sign Up
+              </button>
+
+            </form>
+
+            {/* Login Redirect */}
+            <p className="mt-4 text-sm text-center">
+              Already a user?
+              <Link to="/login" className="text-blue-600 ml-1 font-medium">
+                Login
+              </Link>
+            </p>
+
+          </div>
+
+          {/* RIGHT SIDE IMAGE */}
+          <div className="flex justify-center items-start mt-10">
+            <img
+              src={signupImg}
+              className="max-w-[480px] rounded-md shadow"
+              alt="signup visual"
+            />
+          </div>
+
+        </div>
       </div>
+
+      {/* FOOTER */}
+      <Footer />
+
     </div>
   );
 }

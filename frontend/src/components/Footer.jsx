@@ -15,7 +15,7 @@ export default function Footer() {
             placeholder="Your email"
             className="flex-1 p-3 rounded-l-lg bg-gray-800 text-white border border-gray-700 outline-none"
           />
-          <button className="bg-white text-black px-6 py-3 rounded-r-lg font-semibold hover:bg-gray-200 transition">
+          <button className="bg-[#FFD23F] text-black px-6 py-3 rounded-r-lg font-semibold hover:bg-gray-200 transition">
             Subscribe
           </button>
         </div>
@@ -70,7 +70,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-700 py-6 px-6 text-center text-gray-400 text-sm">
-        ©2025 Company Name. All rights reserved.
+        ©2025 AJH Sports. All rights reserved.
         <div className="mt-2">
           Privacy & Policy • Terms & Condition
         </div>
